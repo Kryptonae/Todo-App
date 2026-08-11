@@ -1,0 +1,333 @@
+:root {
+  /* Sophisticated Dark Palette */
+  --bg-primary: #09090b; /* Very deep zinc */
+  --bg-secondary: #18181b; /* Slightly lighter zinc for gradients */
+  --surface: #27272a; /* Surface for cards/inputs */
+  --surface-hover: #3f3f46; /* Hover states */
+  --text-primary: #f4f4f5; /* Soft white */
+  --text-secondary: #a1a1aa; /* Muted text */
+
+  /* Accent & Semantic Colors */
+  --accent: #6366f1; /* Premium Indigo */
+  --accent-hover: #818cf8;
+  --accent-glow: rgba(99, 102, 241, 0.25);
+  --danger: #ef4444;
+  --danger-bg: rgba(239, 68, 68, 0.1);
+  --danger-hover-bg: rgba(239, 68, 68, 0.2);
+
+  /* Borders & Shadows */
+  --border: rgba(255, 255, 255, 0.08);
+  --border-highlight: rgba(255, 255, 255, 0.15);
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg:
+    0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 0 40px -10px var(--accent-glow);
+
+  /* Animation Curves */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  /* Premium dark gradient background */
+  background-color: var(--bg-primary);
+  background-image: radial-gradient(
+    circle at top center,
+    var(--bg-secondary) 0%,
+    var(--bg-primary) 70%
+  );
+  color: var(--text-primary);
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: clamp(2rem, 5vw, 6rem) 1.5rem;
+  -webkit-font-smoothing: antialiased;
+
+  /* App Entrance Animation */
+  opacity: 0;
+  animation: appEntrance 0.8s var(--ease-out) forwards;
+}
+
+@keyframes appEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#todoForm {
+  width: 100%;
+  max-width: 540px;
+  display: flex;
+  gap: 0.75rem;
+  background: var(--surface);
+  padding: 0.5rem;
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 2rem;
+  transition: all 0.3s var(--ease-out);
+  position: relative;
+  z-index: 10;
+}
+
+/* Smooth Focus State on the entire form container */
+#todoForm:focus-within {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+#todoInput {
+  flex-grow: 1;
+  border: none;
+  background: transparent;
+  font-size: 1.05rem;
+  padding: 0.75rem 1rem;
+  color: var(--text-primary);
+  outline: none;
+}
+
+#todoInput::placeholder {
+  color: var(--text-secondary);
+  transition: opacity 0.3s ease;
+}
+
+#todoInput:focus::placeholder {
+  opacity: 0.5;
+}
+
+#addBtn {
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  padding: 0 1.75rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out);
+  letter-spacing: 0.3px;
+}
+
+#addBtn:hover {
+  background-color: var(--accent-hover);
+  box-shadow: 0 4px 15px var(--accent-glow);
+  transform: translateY(-1px);
+}
+
+#addBtn:active {
+  transform: translateY(1px) scale(0.96);
+}
+
+.todoListContainer {
+  width: 100%;
+  max-width: 540px;
+  background: rgba(39, 39, 42, 0.6); /* Semi-transparent surface */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+#todoList {
+  list-style: none;
+}
+
+/* Elegant Empty State */
+#todoList:empty::after {
+  content: "Your workspace is clear.";
+  display: block;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  opacity: 0.7;
+}
+
+#todoList li {
+  display: flex;
+  align-items: center;
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--border);
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+  gap: 1rem;
+
+  /* Entrance animation for newly added items */
+  animation: slideInItem 0.4s var(--ease-spring) forwards;
+  transform-origin: top;
+}
+
+@keyframes slideInItem {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+#todoList li:last-child {
+  border-bottom: none;
+}
+
+#todoList li:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+#todoList li input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.35rem;
+  height: 1.35rem;
+  border: 2px solid var(--text-secondary);
+  border-radius: 0.35rem;
+  cursor: pointer;
+  display: grid;
+  place-content: center;
+  transition: all 0.2s var(--ease-out);
+  flex-shrink: 0;
+  background: transparent;
+}
+
+#todoList li input[type="checkbox"]:hover {
+  border-color: var(--accent-hover);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Checkmark generation purely in CSS */
+#todoList li input[type="checkbox"]::before {
+  content: "";
+  width: 0.75rem;
+  height: 0.75rem;
+  transform: scale(0);
+  box-shadow: inset 1em 1em white; /* White checkmark */
+  transform-origin: center;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  transition: 150ms transform var(--ease-spring);
+}
+
+#todoList li input[type="checkbox"]:checked {
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+
+#todoList li input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+#todoList li span {
+  flex-grow: 1;
+  font-size: 1rem;
+  color: var(--text-primary);
+  word-break: break-word;
+  transition: all 0.3s ease;
+  line-height: 1.5;
+}
+
+/* Enhancing your existing .checkBox class for completed items */
+#todoList li span.checkBox {
+  text-decoration: line-through;
+  color: var(--text-secondary);
+  opacity: 0.4;
+  transform: translateX(4px); /* Subtle shift when completed */
+}
+
+#todoList li button {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid transparent;
+  padding: 0.4rem 0.85rem;
+  border-radius: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out);
+}
+
+/* Desktop specific: Hide delete button until item hover for cleaner look */
+@media (hover: hover) {
+  #todoList li button {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  #todoList li:hover button {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+#todoList li button:hover {
+  background-color: var(--danger-bg);
+  color: var(--danger);
+  border-color: var(--danger-hover-bg);
+}
+
+#todoList li button:active {
+  transform: scale(0.92);
+}
+
+@media (max-width: 600px) {
+  #todoForm {
+    /* Separate input and button slightly on very small screens for better tapping */
+    flex-direction: column;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  #todoForm:focus-within {
+    box-shadow: none;
+    transform: none;
+  }
+
+  #todoInput {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+  }
+
+  #todoInput:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-glow);
+  }
+
+  #addBtn {
+    padding: 1rem;
+    border-radius: 0.75rem;
+  }
+
+  #todoList li button {
+    /* Always visible on mobile where hover doesn't exist */
+    opacity: 1;
+    transform: translateX(0);
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+  }
+}
